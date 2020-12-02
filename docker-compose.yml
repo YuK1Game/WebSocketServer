@@ -1,0 +1,24 @@
+version: "3.5"
+
+services:
+
+  web:
+    container_name: websocket-local-server
+    image: bref/fpm-dev-gateway
+    ports: 
+      - "8000:80"
+    volumes:
+        - .:/var/task:ro
+        - ./storage:/var/task/storage
+    depends_on:
+      - php
+    environment:
+      HANDLER: public/index.php
+      DOCUMENT_ROOT: public
+
+  php:
+    container_name: websocket-php
+    image: bref/php-80-fpm-dev
+    volumes:
+      - .:/var/task:ro
+      - ./storage:/var/task/storage

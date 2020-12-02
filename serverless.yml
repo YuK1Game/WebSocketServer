@@ -1,0 +1,56 @@
+service: WebSocketServerTest
+
+plugins:
+    - ./vendor/bref/bref
+
+provider:
+    name: aws
+    region: ap-northeast-1
+    stage: dev
+    runtime: provided.al2
+    profile: yuk1
+
+package:
+    exclude:
+        - node_modules/**
+        - public/storage
+        - resources/assets/**
+        - storage/**
+        - tests/**
+
+functions:
+    web:
+        handler: public/index.php
+        timeout: 28
+        layers:
+            - ${bref:layer.php-80-fpm}
+        events:
+            -   httpApi: '*'
+            
+    artisan:
+        handler: artisan
+        timeout: 890
+        layers:
+            - ${bref:layer.php-80}
+            - ${bref:layer.console}
+
+    connectionHandler:
+        handler: public/index.php
+        events:
+            - websocket:
+                route: $connect
+            - websocket:
+                route: $disconnect
+    
+    defaultHandler:
+        handler: public/index.php
+        events:
+            - websocket:
+                route: $default
+
+    customFooHandler:
+        handler: public/index.php
+        events:
+            - websocket:
+                route: foo
+
