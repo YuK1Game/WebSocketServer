@@ -20,5 +20,12 @@ services:
     container_name: websocket-php
     image: bref/php-80-fpm-dev
     volumes:
-      - .:/var/task:ro
-      - ./storage:/var/task/storage
+      - .:/var/task
+
+  redis:
+    container_name: websocket-redis
+    image: redis:latest
+    ports:
+      - "6379:6379"
+    volumes:
+      - "./.docker-compose/redis/.data:/data"

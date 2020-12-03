@@ -1,0 +1,10 @@
+Resources:
+  PrivateSubnet:
+    DependsOn: VPC
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VPC
+      CidrBlock: 10.1.1.0/24
+      Tags:
+        - Key: Name
+          Value: "${self:custom.description} PrivateSubnet"

@@ -2,13 +2,24 @@ service: WebSocketServerTest
 
 plugins:
     - ./vendor/bref/bref
+    - serverless-dotenv-plugin
 
 provider:
     name: aws
     region: ap-northeast-1
-    stage: dev
+    stage: ${env:APP_ENV}
     runtime: provided.al2
     profile: yuk1
+    environment:
+        REDIS_HOST:
+            "Fn::GetAtt": [CacheCluster, RedisEndpoint.Address]
+
+custom:
+    description: "${self:service} Project"
+    dotenv:
+        include:
+            - APP_ENV
+            - REDIS_PORT
 
 package:
     exclude:
@@ -25,7 +36,7 @@ functions:
         layers:
             - ${bref:layer.php-80-fpm}
         events:
-            -   httpApi: '*'
+            - httpApi: '*'
             
     artisan:
         handler: artisan
@@ -36,6 +47,10 @@ functions:
 
     connectionHandler:
         handler: public/index.php
+        layers:
+            - ${bref:layer.php-80-fpm}
+            - ${bref:layer.php-80}
+            - ${bref:layer.console}
         events:
             - websocket:
                 route: $connect
@@ -44,13 +59,26 @@ functions:
     
     defaultHandler:
         handler: public/index.php
+        layers:
+            - ${bref:layer.php-80-fpm}
+            - ${bref:layer.php-80}
+            - ${bref:layer.console}
         events:
             - websocket:
                 route: $default
 
     customFooHandler:
         handler: public/index.php
+        layers:
+            - ${bref:layer.php-80-fpm}
+            - ${bref:layer.php-80}
+            - ${bref:layer.console}
         events:
             - websocket:
                 route: foo
 
+resources:
+    - ${file(./.serverless-config/vpc.yml)}
+    - ${file(./.serverless-config/private-subnet.yml)}
+    - ${file(./.serverless-config/security-group.yml)}
+    - ${file(./.serverless-config/cache-cluster.yml)}
