@@ -46,11 +46,9 @@ functions:
             - ${bref:layer.console}
 
     connectionHandler:
-        handler: public/index.php
+        handler: websocket
         layers:
-            - ${bref:layer.php-80-fpm}
             - ${bref:layer.php-80}
-            - ${bref:layer.console}
         events:
             - websocket:
                 route: $connect
@@ -58,21 +56,17 @@ functions:
                 route: $disconnect
     
     defaultHandler:
-        handler: public/index.php
+        handler: websocket
         layers:
-            - ${bref:layer.php-80-fpm}
             - ${bref:layer.php-80}
-            - ${bref:layer.console}
         events:
             - websocket:
                 route: $default
 
     customFooHandler:
-        handler: public/index.php
+        handler: websocket
         layers:
-            - ${bref:layer.php-80-fpm}
             - ${bref:layer.php-80}
-            - ${bref:layer.console}
         events:
             - websocket:
                 route: foo
