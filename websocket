@@ -11,23 +11,62 @@ use Bref\Event\ApiGateway\WebsocketHandler;
 use Bref\Event\Http\HttpResponse;
 use Bref\Websocket\SimpleWebsocketClient;
 
+use AsyncAws\DynamoDb\Input\PutItemInput;
+use AsyncAws\DynamoDb\ValueObject\AttributeValue;
+use AsyncAws\DynamoDb\DynamoDbClient;
+
 use App\Events\Websockets\PublicEvent;
 
 class Handler extends WebsocketHandler
 {
     public function handleWebsocket(WebsocketEvent $event, Context $context) : HttpResponse
     {
+        $dynamoDb = new DynamoDbClient();
+        $tableName = 'websocketConnectionPool';
+
         echo json_encode($event->toArray());
 
         switch ($event->getEventType()) {
             case 'CONNECT':
+                $dynamoDb->putItem(new PutItemInput([
+                    'TableName' => $tableName,
+                    'Item' => [
+                        'connectionId' => new AttributeValue(['S' => $event->getConnectionId()]),
+                        'apiId' => new AttributeValue(['S' => $event->getApiId()]),
+                        'region' => new AttributeValue(['S' => $event->getRegion()]),
+                        'stage' => new AttributeValue(['S' => $event->getStage()]),
+                    ],
+                ]));
                 return new HttpResponse('connect');
 
             case 'DISCONNECT':
+                $dynamoDb->deleteItem([
+                    'TableName' => $tableName,
+                    'Key' => [
+                        'connectionId' => [
+                            'S' => $event->getConnectionId(),
+                        ],
+                    ]
+                ]);
                 return new HttpResponse('disconnect');
 
             default:
-                PublicEvent::dispatch($event->getConnectionId(), $event->getApiId(), $event->getRegion(), $event->getStage());
+                $data = collect(json_decode($event->getBody()));
+                $text = $data->get('data');
+
+                foreach ($dynamoDb->scan(['TableName' => $tableName])->getItems() as $item) {
+                    $connectionId = $item['connectionId']->getS();
+
+                    $client = SimpleWebsocketClient::create(
+                        $item['apiId']->getS(),
+                        $item['region']->getS(),
+                        $item['stage']->getS()
+                    );
+
+                    $client->message($connectionId, $text);
+                }
+
+                // PublicEvent::dispatch($event->getConnectionId(), $event->getApiId(), $event->getRegion(), $event->getStage());
 
                 // switch ($event->getRouteKey()) {
                 //     case '$default':

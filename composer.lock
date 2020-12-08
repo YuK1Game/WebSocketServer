@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "3cae4afd75fe80d6c0f5bc0a0e4aa2d5",
+    "content-hash": "fe03e836f9f10d02c00b1dc0cd0e899f",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -121,6 +121,61 @@
                 }
             ],
             "time": "2020-11-30T08:39:49+00:00"
+        },
+        {
+            "name": "async-aws/dynamo-db",
+            "version": "1.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/async-aws/dynamo-db.git",
+                "reference": "92bdc56808e315f20d424ee061dc3e3edab14898"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/async-aws/dynamo-db/zipball/92bdc56808e315f20d424ee061dc3e3edab14898",
+                "reference": "92bdc56808e315f20d424ee061dc3e3edab14898",
+                "shasum": ""
+            },
+            "require": {
+                "async-aws/core": "^1.2",
+                "ext-filter": "*",
+                "ext-json": "*",
+                "php": "^7.2.5 || ^8.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.1-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "AsyncAws\\DynamoDb\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "DynamoDb client, part of the AWS SDK provided by AsyncAws.",
+            "keywords": [
+                "amazon",
+                "async-aws",
+                "aws",
+                "dynamo-db",
+                "sdk"
+            ],
+            "funding": [
+                {
+                    "url": "https://github.com/jderusse",
+                    "type": "github"
+                },
+                {
+                    "url": "https://github.com/nyholm",
+                    "type": "github"
+                }
+            ],
+            "time": "2020-11-26T10:45:33+00:00"
         },
         {
             "name": "async-aws/lambda",

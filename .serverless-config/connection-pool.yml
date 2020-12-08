@@ -1,0 +1,14 @@
+Resources:
+  ConnectionPool:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: websocketConnectionPool
+      AttributeDefinitions:
+        - AttributeName: connectionId
+          AttributeType: S
+      KeySchema:
+        - AttributeName: connectionId
+          KeyType: HASH
+      ProvisionedThroughput:
+        ReadCapacityUnits: 1
+        WriteCapacityUnits: 1
