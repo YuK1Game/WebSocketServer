@@ -9,6 +9,8 @@ services:
       - "8000:80"
     volumes:
         - .:/var/task:ro
+        - ./cache:/var/task/cache
+        - ./bootstrap/cache:/var/task/bootstrap/cache
         - ./storage:/var/task/storage
     depends_on:
       - php
@@ -18,9 +20,14 @@ services:
 
   php:
     container_name: websocket-php
-    image: bref/php-80-fpm-dev
+    build:
+      context: .
+      dockerfile: ./.docker-compose/php/Dockerfile
     volumes:
-      - .:/var/task
+        - .:/var/task:ro
+        - ./cache:/var/task/cache
+        - ./bootstrap/cache:/var/task/bootstrap/cache
+        - ./storage:/var/task/storage
 
   redis:
     container_name: websocket-redis
@@ -29,3 +36,11 @@ services:
       - "6379:6379"
     volumes:
       - "./.docker-compose/redis/.data:/data"
+
+  dynamodb:
+    container_name: websocket-dynamodb
+    image: amazon/dynamodb-local
+    ports: 
+      - "8074:8074"
+    volumes: 
+      - "./.docker-compose/dynamodb/.data:/data"

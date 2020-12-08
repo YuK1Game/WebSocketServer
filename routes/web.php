@@ -26,3 +26,7 @@ Route::get('/public-event', function(){
 Route::get('/test', function() {
     return 'test';
 });
+
+Route::get('/socket.io', function() {
+    return 'socket.io';
+});

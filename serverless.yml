@@ -1,4 +1,4 @@
-service: WebSocketServerTest
+service: websocket
 
 plugins:
     - ./vendor/bref/bref
@@ -37,6 +37,7 @@ functions:
             - ${bref:layer.php-80-fpm}
         events:
             - httpApi: '*'
+        warmer: true
             
     artisan:
         handler: artisan
@@ -45,31 +46,16 @@ functions:
             - ${bref:layer.php-80}
             - ${bref:layer.console}
 
-    connectionHandler:
+    websocket:
         handler: websocket
         layers:
             - ${bref:layer.php-80}
+            - ${bref:extra.redis-php-80}
         events:
-            - websocket:
-                route: $connect
-            - websocket:
-                route: $disconnect
-    
-    defaultHandler:
-        handler: websocket
-        layers:
-            - ${bref:layer.php-80}
-        events:
-            - websocket:
-                route: $default
-
-    customFooHandler:
-        handler: websocket
-        layers:
-            - ${bref:layer.php-80}
-        events:
-            - websocket:
-                route: foo
+            - websocket: $connect
+            - websocket: $disconnect
+            - websocket: $default
+            - websocket: message
 
 resources:
     - ${file(./.serverless-config/vpc.yml)}
