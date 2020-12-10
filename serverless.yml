@@ -51,7 +51,7 @@ functions:
       - ${bref:layer.console}
 
   websocket:
-    handler: websocket
+    handler: vendor/yuk1/laravel-bref-websockets/handler
     layers:
       - ${bref:layer.php-80}
     events:

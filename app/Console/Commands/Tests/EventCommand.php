@@ -4,7 +4,7 @@ namespace App\Console\Commands\Tests;
 
 use Illuminate\Console\Command;
 
-use Illuminate\Support\Facades\Broadcast;
+use YuK1\LaravelBrefWebsocket\ConnectionPool\ConnectionPool;
 
 class EventCommand extends Command
 {
@@ -39,7 +39,10 @@ class EventCommand extends Command
      */
     public function handle()
     {
-        \App\Events\Websockets\PublicEvent::dispatch('', '', '', '');
+        // \App\Events\Websockets\PublicEvent::dispatch('', '', '', '');
+
+        $data = ConnectionPool::factory();
+        dd(get_class($data));
 
         return 0;
     }

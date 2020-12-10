@@ -9,20 +9,20 @@
     "license": "MIT",
     "require": {
         "php": "^7.3|^8.0",
-        "async-aws/dynamo-db": "^1.0",
         "bref/bref": "^1.0",
-        "bref/extra-php-extensions": "^0.8.1",
         "bref/laravel-bridge": "^1.0",
         "fideloper/proxy": "^4.4",
         "fruitcake/laravel-cors": "^2.0",
         "guzzlehttp/guzzle": "^7.0.1",
-        "laravel/framework": "^8.12",
+        "laravel/framework": "^8.17",
         "laravel/tinker": "^2.5",
-        "predis/predis": "^1.1"
+        "sensiolabs/security-checker": "^6.0",
+        "yuk1/laravel-bref-websockets": "dev-main"
     },
     "require-dev": {
         "facade/ignition": "^2.5",
         "fakerphp/faker": "^1.9.1",
+        "jeroen-g/laravel-packager": "^2.6",
         "mockery/mockery": "^1.4.2",
         "nunomaduro/collision": "^5.0",
         "phpunit/phpunit": "^9.3.3"
@@ -74,6 +74,21 @@
         ],
         "service:remove": [
             "serverless remove -v"
+        ],
+        "reinstall": [
+            "rmdir /s /q vendor\\yuk1",
+            "composer require yuk1/laravel-bref-websockets",
+            "php artisan vendor:publish --tag=config",
+            "composer optimize"
         ]
+    },
+    "repositories": {
+        "yuk1/laravel-bref-websockets": {
+            "type": "path",
+            "url": "../laravel-bref-websocket",
+            "options": {
+                "symlink": true
+            }
+        }
     }
 }
