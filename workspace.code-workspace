@@ -1,0 +1,11 @@
+{
+	"folders": [
+		{
+			"path": ".",
+		},
+		{
+			"path": "packages/yuk1/laravel-bref-websockets",
+		}
+	],
+	"settings": {}
+}
